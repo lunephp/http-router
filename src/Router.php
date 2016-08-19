@@ -66,10 +66,10 @@ class Router extends RouteCollectorAbstract
             $target = array_shift($rv);
             $method = array_shift($rv);
 
-            if (is_string($target)) {
+            $rv = function ($request, $response, $args) use ($target, $method) {
                 $obj = $this->container->has($target) ? $this->container->get($target) : new $target;
-                $rv = [$obj, $method];
-            }
+                return call_user_func_array([$obj, $method], [$request, $response, $args]);
+            };
         }
 
         return $rv;
