@@ -56,31 +56,23 @@ class Router extends RouteCollectorAbstract
 
     private function convertToCallable($handler):callable
     {
-        if (is_callable($handler)) {
-            return $handler;
+        $rv = $handler;
+
+        if (is_string($rv) && strpos($rv, '::')) {
+            $rv = explode('::', $rv);
         }
 
-        if (is_string($handler) && strpos($handler, '::')) {
-            return $this->convertToCallable(explode('::', $handler));
-        }
-
-        if (is_array($handler) && sizeof($handler) == 2) {
-
-            $target = array_shift($handler);
-            $method = array_shift($handler);
+        if (is_array($rv) && isset($rv[0])) {
+            $target = array_shift($rv);
+            $method = array_shift($rv);
 
             if (is_string($target)) {
-                if ($this->container->has($target)) {
-                    $obj = $this->container->get($target);
-                    return $this->convertToCallable([$obj, $method]);
-                } else if (class_exists($handler[0])) {
-                    $obj = new $target;
-                    return $this->convertToCallable([$obj, $method]);
-                }
+                $obj = $this->container->has($target) ? $this->container->get($target) : new $target;
+                $rv = [$obj, $method];
             }
         }
 
-
+        return $rv;
     }
 
 
