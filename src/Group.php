@@ -27,7 +27,7 @@ class Group extends RouteCollectorAbstract
     {
         $path = trim($this->prefix . "/" . ltrim($path, '/'), '/');
         $middlewares = array_merge($this->middlewares, $middlewares);
-        $parameters = array_merge($this->middlewares, $parameters);
+        $parameters = array_merge($this->parameters, $parameters);
         $this->router->add(
             $method,
             $path,
@@ -41,7 +41,7 @@ class Group extends RouteCollectorAbstract
     {
 
         $middlewares = array_merge($this->middlewares, $middlewares);
-        $parameters = array_merge($this->middlewares, $parameters);
+        $parameters = array_merge($this->parameters, $parameters);
         $this->router->group("{$this->prefix}{$prefix}", $callback, $middlewares, $parameters);
     }
 }
