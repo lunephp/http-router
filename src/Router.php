@@ -6,6 +6,7 @@ namespace Lune\Http\Router;
 
 use Interop\Container\ContainerInterface;
 use League\Route\RouteCollection;
+use League\Container\Container;
 use Lune\Http\Middleware\MiddlewareProvider;
 
 use Psr\Http\Message\ResponseInterface;
@@ -18,10 +19,10 @@ class Router extends RouteCollectorAbstract
     private $routeCollection;
 
 
-    public function __construct(ContainerInterface $container, MiddlewareProvider $provider)
+    public function __construct(ContainerInterface $container = null, MiddlewareProvider $provider = null)
     {
-        $this->setContainer($container);
-        $this->setProvider($provider);
+        $this->setContainer($container??new Container);
+        $this->setProvider($provider??new MiddlewareProvider());
         $this->routeCollection = new RouteCollection($container);
     }
 

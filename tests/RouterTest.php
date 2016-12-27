@@ -3,6 +3,7 @@
 
 namespace Lune\Http\Router\Tests;
 
+use Interop\Container\ContainerInterface;
 use League\Container\Container;
 use Lune\Http\Middleware\FrameInterface;
 use Lune\Http\Middleware\Middleware\CallableWrapper;
@@ -32,6 +33,14 @@ class RouterTest extends PHPUnit_Framework_TestCase
         return new ServerRequest([], [], $path, $method);
     }
 
+    /**
+     * @test
+     */
+    public function testDefaultConstructorParameters(){
+        $router = new Router();
+        $this->assertInstanceOf(ContainerInterface::class, $router->getContainer());
+        $this->assertInstanceOf(MiddlewareProvider::class, $router->getProvider());
+    }
     /**
      * @test
      */
