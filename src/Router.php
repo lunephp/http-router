@@ -59,9 +59,14 @@ class Router extends RouteCollectorAbstract
     {
         $rv = $handler;
 
-        if (is_string($rv) && strpos($rv, '::')) {
-            $rv = explode('::', $rv);
+        if (is_string($rv)) {
+            if (is_string($rv) && class_exists($rv) && method_exists($rv, '__invoke')) {
+                $rv = new $rv;
+            } else if (strpos($rv, '::')) {
+                $rv = explode('::', $rv);
+            }
         }
+
 
         if (is_array($rv) && isset($rv[0])) {
             $target = array_shift($rv);
